@@ -61,8 +61,8 @@ class TextClassification:
 datasets = load_dataset("clapAI/MultiLingualSentiment") # Counter({'negative': 442928, 'positive': 412535, 'neutral': 360246})
 datasets = datasets.filter(lambda x: x["language"]=="en" )
 datasets = datasets.remove_columns(["source","domain","language"])
-text = datasets["train"]["text"]
-label = datasets["train"]["label"]
+text = datasets["train"]["text"][:5000]
+label = datasets["train"]["label"][:5000]
 tf=TextClassification("TF_IDF")
 X_train,y_train,X_test,y_test = tf.dataset_split(text,label)
 tf.train_multi_model(X_train,y_train,X_test,y_test)

@@ -39,7 +39,7 @@ class TextClassification:
             _,_,features_list = TF_IDF(features).TF_IDF()
         if self.methods == "BoW":
             features_list = BagOfWords(features).create_vectors()
-        return train_test_split(features_list,labels_list,test_size=0.2,state_random=42)
+        return train_test_split(features_list,labels_list,test_size=0.2,random_state=42)
         
     def train_multi_model(self,X_train,y_train,X_test,y_test):
         models = {

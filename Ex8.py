@@ -21,7 +21,7 @@ class TF_IDF:
         N = len(self.documents)
         IDF = {}
         for doc in self.documents:
-            words = self.preprocessing(doc)
+            words = set(self.preprocessing(doc))
             for word in words:
                 IDF[word] = IDF.get(word, 0) + 1
         for word in IDF:
@@ -29,24 +29,39 @@ class TF_IDF:
         return IDF
     
     def TF_IDF(self):
+        # IDF = self.create_IDF()
+        # results = []
+        # matrix_vocab = []
+        # matrix_tfidf = []
+        # row = []
+        # for doc in range(len(self.documents)):
+        #     TF = self.create_TF(self.documents[doc])
+        #     tfidf = {}
+        #     for word in TF:
+        #         tfidf[word] = TF[word] * IDF[word]
+        #         row.append(tfidf[word])
+        #         if word not in matrix_vocab:
+        #             matrix_vocab.append(word)       
+        #     results.append(tfidf)
+        #     matrix_tfidf.append(row)
+        #     row = []
+        # return results,matrix_vocab,matrix_tfidf
+        
         IDF = self.create_IDF()
-        results = []
-        matrix_vocab = []
+        # tạo vocabulary toàn bộ dataset
+        vocabulary = sorted(IDF.keys())
         matrix_tfidf = []
-        row = []
-        for doc in range(len(self.documents)):
-            TF = self.create_TF(self.documents[doc])
-            tfidf = {}
-            for word in TF:
-                tfidf[word] = TF[word] * IDF[word]
-                row.append(tfidf[word])
-                if word not in matrix_vocab:
-                    matrix_vocab.append(word)       
-            results.append(tfidf)
-            matrix_tfidf.append(row)
+        for doc in self.documents:
+            TF = self.create_TF(doc)
             row = []
-        return results,matrix_vocab,matrix_tfidf
-
+            for vocab_word in vocabulary:
+                if vocab_word in TF:
+                    value = TF[vocab_word] * IDF[vocab_word]
+                else:
+                    value = 0
+                row.append(value)
+            matrix_tfidf.append(row)
+        return vocabulary, matrix_tfidf
 
 documents = [
     "I love NLP",
@@ -54,7 +69,7 @@ documents = [
     "I love machine learning"
 ]
 model = TF_IDF(documents)
-result,matrix_vocab,matrix_tfidf = model.TF_IDF()
+result,matrix_tfidf = model.TF_IDF()
 print(result)
-print(matrix_vocab)
+# print(matrix_vocab)
 print(matrix_tfidf)
